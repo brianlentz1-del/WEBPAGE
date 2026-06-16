@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LIV.U — Train with clarity</title>
+<meta name="description" content="LIV.U reads your body, your effort, and your genetics — and gives you one clear answer every morning."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-snap-type:y mandatory;scroll-padding-top:80px}
+body{
+  font-family:-apple-system,'SF Pro Text','SF Pro Display',BlinkMacSystemFont,'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  background:#070B14;color:#EDF0F7;overflow-x:hidden;line-height:1;
+  scroll-behavior:smooth;
+}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+::selection{background:rgba(41,121,255,0.28);color:#fff}
+
+:root{
+  --bg:#070B14;
+  --txt:#F2F5FB;
+  --sub:rgba(206,216,234,0.66);
+  --dim:rgba(180,192,218,0.4);
+  --accent:#2979FF;
+  --accentHi:#5FA8FF;
+  --green:#00E676;
+  --pink:#D500F9;
+  --border:rgba(255,255,255,0.08);
+  --pad:clamp(24px,5vw,80px);
+  --max:1120px;
+}
+
+/* Soft depth — white center glow + cool periphery */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(180deg,#070B14 0%,#0B1124 30%,#0E1730 55%,#0A1020 80%,#070B14 100%);
+}
+/* Fine-grain noise — barely-there texture that kills banding on gradients */
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 20%,rgba(225,235,255,0.09) 0%,transparent 60%),
+    radial-gradient(ellipse 90% 60% at 50% 0%,rgba(41,121,255,0.14) 0%,transparent 70%),
+    radial-gradient(ellipse 70% 50% at 80% 60%,rgba(16,185,129,0.07) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 40% at 20% 70%,rgba(59,130,246,0.06) 0%,transparent 60%)
+};
+}
+.grain{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.025;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:10px;transition:background 300ms}
+::-webkit-scrollbar-thumb:hover{background:var(--accentHi)}
+
+/* ── NAV ─────────────────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px var(--pad);transition:background .4s,backdrop-filter .4s,transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  transform:translateY(0);
+}
+nav.scrolled{
+  background:rgba(7,11,20,0.82);
+  backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-size:19px;font-weight:700;letter-spacing:-.01em;color:var(--txt);display:flex;align-items:baseline;gap:2px}
+.logo sup{font-size:8px;color:var(--accent);font-weight:400}
+.nav-cta{
+  font-size:16px;font-weight:700;letter-spacing:-.01em;
+  padding:14px 32px;border-radius:980px;
+  background:rgba(41,121,255,0.08);color:#5FA8FF;
+  border:2px solid rgba(95,168,255,0.5);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  box-shadow:0 1px 0 rgba(255,255,255,0.15) inset,0 12px 32px rgba(0,0,0,0.2),0 0 50px rgba(95,168,255,0.35);
+  transition:all 300ms cubic-bezier(0.34,1.56,0.64,1);
+}
+.nav-cta:hover{
+  background:rgba(41,121,255,0.12);
+  border-color:rgba(95,168,255,0.75);
+  box-shadow:0 1px 0 rgba(255,255,255,0.15) inset,0 12px 32px rgba(0,0,0,0.2),0 0 70px rgba(95,168,255,0.5);
+  transform:translateY(-3px);
+}
+}
+
+/* ── BUTTONS — Apple pill ────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:600;letter-spacing:0.5px;
+  padding:20px 60px;border-radius:980px;
+  transition:all 400ms cubic-bezier(0.34,1.56,0.64,1);
+  white-space:nowrap;cursor:pointer;
+  box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 8px 24px rgba(0,0,0,0.2);
+}
+.btn-primary{background:rgba(41,121,255,0.18);color:#2979FF;border:1px solid rgba(41,121,255,0.3);backdrop-filter:blur(28px) brightness(1.1);-webkit-backdrop-filter:blur(28px) brightness(1.1);box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 10px 30px rgba(0,0,0,0.15),0 0 80px rgba(41,121,255,0.55)}
+.btn-primary:hover{transform:translateY(-4px);background:rgba(41,121,255,0.25);box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 15px 40px rgba(0,0,0,0.25),0 0 100px rgba(41,121,255,0.75)}
+.btn-light{background:rgba(41,121,255,0.18);color:#2979FF;border:1px solid rgba(41,121,255,0.3);backdrop-filter:blur(28px) brightness(1.1);-webkit-backdrop-filter:blur(28px) brightness(1.1);box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 10px 30px rgba(0,0,0,0.15),0 0 80px rgba(41,121,255,0.55)}
+.btn-light:hover{transform:translateY(-4px);background:rgba(41,121,255,0.25);box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 15px 40px rgba(0,0,0,0.25),0 0 100px rgba(41,121,255,0.75)}
+.btn:active{transform:scale(0.96);transition:transform 100ms cubic-bezier(0.34,1.56,0.64,1)}
+.btn:focus{outline:2px solid rgba(41,121,255,0.8);outline-offset:4px;border-color:rgba(41,121,255,0.5)}
+.link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:16px;font-weight:500;letter-spacing:-.01em;color:var(--accentHi);
+  transition:gap .25s ease;
+  border-radius:4px;
+  padding:4px 6px;
+}
+.link:hover{gap:11px}
+.link:focus{outline:2px solid rgba(41,121,255,0.8);outline-offset:2px}
+.link .arr{font-size:15px}
+.cta-ctas .link{margin-top:60px}
+
+/* ── HERO ────────────────────────────────────────────────────────────────── */
+#hero{
+  min-height:100dvh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:clamp(120px,15vw,160px) clamp(20px,5vw,40px) clamp(100px,12vw,140px);position:relative;
+}
+.hero-pre{
+  font-size:16px;font-weight:500;letter-spacing:-.01em;
+  color:var(--accentHi);margin-bottom:32px;
+}
+.hero-h{
+  font-size:clamp(52px,9vw,100px);font-weight:700;
+  line-height:1.0;letter-spacing:-.04em;color:var(--txt);
+  margin-bottom:40px;max-width:14ch;
+}
+.hero-sub{
+  font-size:18px;font-weight:400;
+  line-height:1.65;letter-spacing:-.01em;color:var(--sub);
+  max-width:45ch;margin:0 auto 80px;
+}
+.hero-ctas{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:center}
+
+/* Hero orb — FC BARCELONA LUXURY INTERPRETATION */
+.orb{
+  position:relative;width:min(260px,62vw);height:min(260px,62vw);
+  margin:0 auto 64px;
+  filter:drop-shadow(0 0 140px rgba(165,0,68,0.18)) drop-shadow(0 0 80px rgba(0,77,152,0.14)) drop-shadow(0 0 40px rgba(237,187,0,0.1));
+}
+/* Outer frame: REMOVED */
+.orb-halo{
+  display:none;
+}
+/* Main body: Barcelona colors with luxury frosted glass effect */
+.orb-body{
+  position:absolute;inset:0;border-radius:50%;
+  /* Barcelona color gradient: Deep Blau (#004D98) → Grana crimson (#A50044) → Gold (#EDBB00) */
+  background:
+    /* Core Blau (deep velvet) */
+    linear-gradient(135deg, rgba(0,77,152,0.35) 0%, rgba(0,77,152,0.25) 25%),
+    /* Mid transition to Grana (crimson) */
+    linear-gradient(225deg, rgba(165,0,68,0.3) 25%, rgba(165,0,68,0.2) 75%),
+    /* Gold specular highlight (liquid, melting) */
+    radial-gradient(circle at 35% 28%, rgba(237,187,0,0.32) 0%, rgba(237,187,0,0.08) 35%, transparent 60%),
+    /* Base frosted glass */
+    radial-gradient(circle at 40% 25%, rgba(255,255,255,0.12) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(14,20,36,0.5) 0%, rgba(7,11,20,0.7) 100%);
+  
+  /* Luxury frosted glass with premium luster */
+  border:1px solid rgba(237,187,0,0.2);
+  backdrop-filter:blur(52px) brightness(1.16) saturate(1.1);
+  -webkit-backdrop-filter:blur(52px) brightness(1.16) saturate(1.1);
+  
+  /* Premium ambient glow: Barcelona colors bleeding into visual silence */
+  box-shadow:
+    /* Inner Blau glow: deep, velvet subsurface */
+    inset 0 0 120px rgba(0,77,152,0.22),
+    inset 0 0 60px rgba(0,77,152,0.14),
+    /* Inner Grana warmth: energetic crimson undertone */
+    inset 0 0 80px rgba(165,0,68,0.16),
+    inset 0 0 40px rgba(165,0,68,0.08),
+    /* Gold specular highlight: liquid catch light */
+    inset 48px 48px 100px rgba(237,187,0,0.28),
+    inset -48px -48px 100px rgba(0,77,152,0.12),
+    /* Outer ambient glow: Barcelona signature */
+    0 0 140px rgba(165,0,68,0.18),
+    0 0 100px rgba(0,77,152,0.14),
+    0 0 60px rgba(237,187,0,0.12),
+    0 0 30px rgba(165,0,68,0.08);
+  
+  /* Fluid breathing animation with Barcelona color transitions */
+  animation:barcelonaAmbientPulse 7s ease-in-out infinite;
+  transition:box-shadow 4s cubic-bezier(0.25,0.46,0.45,0.94), border-color 4s ease-in-out;
+}
+/* Specular highlight layer: sharp light catch */
+.orb-body::before{
+  content:'';
+  position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 38% 28%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.1) 15%, transparent 40%);
+  pointer-events:none;
+  animation:specularShift 8s ease-in-out infinite;
+}
+/* Content container */
+.orb-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+.orb-num{
+  font-size:clamp(56px,13vw,76px);
+  font-weight:700;letter-spacing:-.03em;line-height:1;
+  color:var(--txt);
+  text-shadow:0 4px 16px rgba(255,184,0,0.25);
+  transition:text-shadow 0.8s;
+}
+.orb-state{
+  font-size:12px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;margin-top:8px;
+  color:#FFB800;
+  transition:color 0.8s;
+  text-shadow:0 2px 6px rgba(255,184,0,0.2);
+}
+/* Animations: elegant, minimal motion */
+@keyframes orbBreathe{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 0 120px rgba(255,184,0,0.12))}
+  50%{transform:scale(1.02);filter:drop-shadow(0 0 140px rgba(255,184,0,0.16))}
+}
+@keyframes specularShift{
+  0%,100%{opacity:0.8;transform:translate(0,0)}
+  50%{opacity:0.6;transform:translate(8px,8px)}
+}
+/* LUMINARY STATUS: 12-second linear gradient rotation */
+@keyframes luminariHaloRotate{
+  0%{transform:rotate(0deg);filter:blur(0px)}
+  50%{filter:blur(3px)}
+  100%{transform:rotate(360deg);filter:blur(0px)}
+}
+/* BARCELONA AMBIENT PULSE: 7-second breathing with color transitions */
+@keyframes barcelonaAmbientPulse{
+  0%,100%{
+    transform:scale(1);
+    filter:drop-shadow(0 0 140px rgba(165,0,68,0.18)) drop-shadow(0 0 80px rgba(0,77,152,0.14)) drop-shadow(0 0 40px rgba(237,187,0,0.1));
+  }
+  25%{
+    filter:drop-shadow(0 0 160px rgba(165,0,68,0.22)) drop-shadow(0 0 100px rgba(0,77,152,0.16)) drop-shadow(0 0 50px rgba(237,187,0,0.12));
+  }
+  50%{
+    transform:scale(1.04);
+    filter:drop-shadow(0 0 180px rgba(165,0,68,0.25)) drop-shadow(0 0 120px rgba(0,77,152,0.18)) drop-shadow(0 0 60px rgba(237,187,0,0.14));
+  }
+  75%{
+    filter:drop-shadow(0 0 160px rgba(165,0,68,0.22)) drop-shadow(0 0 100px rgba(0,77,152,0.16)) drop-shadow(0 0 50px rgba(237,187,0,0.12));
+  }
+}
+
+/* ── PHYSIOLOGICAL TELEMETRY: Autonomic Breathing (0.15-0.25 Hz) ──────────── */
+/* Mimics resting respiratory rhythm: ~6s full cycle = 0.167 Hz */
+@keyframes autonomicBreath{
+  0%{
+    transform:scale(1);
+    filter:drop-shadow(0 0 120px rgba(0,230,118,0.08));
+  }
+  25%{
+    transform:scale(1.015);
+    filter:drop-shadow(0 0 130px rgba(0,230,118,0.10));
+  }
+  50%{
+    transform:scale(1.025);
+    filter:drop-shadow(0 0 140px rgba(0,230,118,0.12));
+  }
+  75%{
+    transform:scale(1.015);
+    filter:drop-shadow(0 0 130px rgba(0,230,118,0.10));
+  }
+  100%{
+    transform:scale(1);
+    filter:drop-shadow(0 0 120px rgba(0,230,118,0.08));
+  }
+}
+
+/* ── MASS-SPRING-DAMPER: Overshoot + natural deceleration ─────────────────── */
+/* When state changes, spring physics create subtle anticipation & rebound */
+@keyframes springBoost{
+  0%{transform:scale(1);opacity:1}
+  40%{transform:scale(1.08);opacity:0.95}
+  70%{transform:scale(0.98);opacity:1}
+  100%{transform:scale(1);opacity:1}
+}
+
+/* ── PERLIN NOISE EFFECT: Undulating surface deformation ──────────────────── */
+/* Layered noise frequencies create fluid, organic membrane feel */
+.orb-body{
+  position:absolute;inset:0;border-radius:50%;
+  /* Semi-transparent, dark base */
+  background:
+    radial-gradient(circle at 40% 25%, rgba(255,255,255,0.08) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(14,20,36,0.4) 0%, rgba(7,11,20,0.6) 100%);
+  
+  /* Frosted glass effect: backdrop blur + sharp edges */
+  border:1px solid rgba(0,230,118,0.18);
+  backdrop-filter:blur(40px) brightness(1.15);
+  -webkit-backdrop-filter:blur(40px) brightness(1.15);
+  
+  /* Subsurface glow: internal emission from center */
+  box-shadow:
+    /* Inner glow: soft subsurface emission */
+    inset 0 0 80px rgba(0,230,118,0.15),
+    inset 0 0 40px rgba(0,230,118,0.08),
+    /* Specular highlight: sharp, focused light */
+    inset 30px 30px 60px rgba(255,255,255,0.25),
+    inset -30px -30px 60px rgba(0,230,118,0.05),
+    /* Outer glow: subtle chromatic separation */
+    0 0 100px rgba(0,230,118,0.12),
+    0 0 60px rgba(0,230,118,0.06),
+    0 0 30px rgba(41,121,255,0.04);
+  
+  /* Autonomic breathing: physiological rhythm */
+  animation:autonomicBreath 6s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  transition:box-shadow 0.8s cubic-bezier(0.2,0.8,0.2,1);
+  
+  /* Enable hardware acceleration for smooth motion */
+  will-change:transform,filter;
+  transform-origin:center;
+  backface-visibility:hidden;
+}
+
+/* State transition: Spring physics on class change */
+.orb-body.active{
+  animation:autonomicBreath 5.2s cubic-bezier(0.42, 0, 0.58, 1) infinite, springBoost 0.6s cubic-bezier(0.34,1.56,0.64,1) 1;
+}
+.orb-body.synced{
+  animation:autonomicBreath 4.8s cubic-bezier(0.42, 0, 0.58, 1) infinite, springBoost 0.7s cubic-bezier(0.34,1.56,0.64,1) 1;
+}
+
+/* Perlin noise layer: Subtle undulation via filter-based distortion */
+.orb-body::after{
+  content:'';
+  position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle, transparent 30%, rgba(0,230,118,0.02) 100%);
+  pointer-events:none;
+  animation:noiseWave 12s linear infinite;
+  filter:blur(2px) contrast(1.1);
+}
+
+@keyframes noiseWave{
+  0%{
+    opacity:0.3;
+    filter:blur(2px) contrast(1.1) brightness(1);
+  }
+  33%{
+    opacity:0.4;
+    filter:blur(3px) contrast(1.15) brightness(1.02);
+  }
+  66%{
+    opacity:0.35;
+    filter:blur(2.5px) contrast(1.12) brightness(0.99);
+  }
+  100%{
+    opacity:0.3;
+    filter:blur(2px) contrast(1.1) brightness(1);
+  }
+}
+
+/* ── FEATURE BLOCKS — alternating L/R ───────────────────────────────────── */
+.feature{
+  display:flex;flex-direction:column;gap:48px;
+  align-items:center;
+  max-width:var(--max);margin:0 auto;
+  padding:clamp(80px,12vw,140px) clamp(20px,5vw,40px);
+  background:linear-gradient(135deg,rgba(41,121,255,0.04) 0%,rgba(0,230,118,0.04) 50%,rgba(213,0,249,0.04) 100%);
+  border-radius:24px;
+  border:1px solid rgba(41,121,255,0.12);
+}
+@media(min-width:860px){
+  .feature{flex-direction:row;gap:64px}
+  .feature.flip{flex-direction:row-reverse}
+}
+.feature-text{flex:1}
+.feature-visual{flex:1;width:100%;display:flex;align-items:center;justify-content:center}
+.f-eyebrow{
+  font-size:16px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
+  margin-bottom:20px;
+}
+.f-eyebrow.green{color:var(--green)}
+.f-eyebrow.blue{color:var(--accentHi)}
+.f-eyebrow.pink{color:var(--pink)}
+.f-h{
+  font-size:clamp(40px,5.5vw,64px);font-weight:700;
+  line-height:1.05;letter-spacing:-.03em;color:var(--txt);
+  margin-bottom:28px;max-width:16ch;
+}
+.f-sub em{font-style:italic;color:var(--accentHi)}
+.f-sub{
+  font-size:clamp(20px,2.4vw,24px);font-weight:400;
+  line-height:1.65;letter-spacing:-.01em;color:var(--sub);
+  max-width:42ch;margin-bottom:36px;
+}
+
+/* ── VISUALS — LIQUID GLASS ──────────────────────────────────────────────── */
+.visual-card{
+  width:100%;max-width:480px;aspect-ratio:9/12;
+  border-radius:38px;position:relative;overflow:hidden;
+  background:rgba(14,20,36,0.55);
+  backdrop-filter:blur(60px) saturate(200%) brightness(1.04);
+  -webkit-backdrop-filter:blur(60px) saturate(200%) brightness(1.04);
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.2) inset,
+    0 40px 100px rgba(0,0,0,0.55),
+    0 12px 36px rgba(0,0,0,0.4);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s;
+}
+.feature-visual:hover .visual-card{
+  transform:translateY(-6px);
+  backdrop-filter:blur(80px) saturate(220%) brightness(1.08);
+  -webkit-backdrop-filter:blur(80px) saturate(220%) brightness(1.08);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.26) inset,
+    0 52px 120px rgba(0,0,0,0.6),
+    0 16px 44px rgba(0,0,0,0.45),
+    0 0 50px rgba(41,121,255,0.15);
+}
+/* Top specular catch-light */
+.visual-card::before{
+  content:'';position:absolute;top:0;left:8%;right:8%;height:1px;z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent);
+}
+/* Liquid sheen — diagonal light sweep that animates in on reveal */
+.visual-card::after{display:none}
+
+/* ── SHARED INNER GLASS PANEL — refined pattern ──────────────────────────── */
+/* Every inner element (rows, chips, state cards) shares this material:
+   • layered gradient fill   • top catch-light via ::before
+   • inset highlight + soft drop shadow   • lift + brighten on hover         */
+.glass-inner{
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,0.055);
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.14) inset,
+    0 8px 22px rgba(0,0,0,0.22);
+  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s,border-color .3s;
+}
+.glass-inner::before{display:none}
+.glass-inner:hover{
+  transform:translateY(-3px);
+  border-color:rgba(255,255,255,0.2);
+  box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 14px 32px rgba(0,0,0,0.3);
+}
+
+/* Effort visual — stacked modality rows */
+.effort{width:100%;padding:40px;display:flex;flex-direction:column;gap:18px;position:relative;z-index:1}
+.effort-row{
+  display:flex;align-items:center;gap:16px;padding:20px 22px;border-radius:24px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:0 1px 0 rgba(255,255,255,0.1) inset,0 8px 24px rgba(0,0,0,0.2);
+  transition:all 300ms cubic-bezier(0.34,1.56,0.64,1);
+}
+.effort-row:hover{
+  background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:0 1px 0 rgba(255,255,255,0.15) inset,0 12px 32px rgba(0,0,0,0.3);
+}
+.effort-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(150deg,rgba(41,121,255,0.26),rgba(41,121,255,0.08));border:1px solid rgba(41,121,255,0.34);box-shadow:0 1px 0 rgba(255,255,255,0.18) inset;font-size:20px}
+.effort-meta{flex:1}
+.effort-name{font-size:16px;font-weight:600;letter-spacing:-.01em;color:var(--txt);margin-bottom:8px}
+.effort-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden}
+.effort-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accentHi));box-shadow:0 0 12px rgba(41,121,255,0.5)}
+.effort-val{font-size:14px;font-weight:600;color:var(--accentHi);font-family:var(--mono,'JetBrains Mono',monospace);flex-shrink:0}
+
+/* Recovery ring visual */
+.recovery{display:flex;flex-direction:column;align-items:center;gap:28px;padding:42px}
+.rec-ring-wrap{position:relative;width:228px;height:228px}
+.rec-ring{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.rec-track{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:9}
+.rec-prog{fill:none;stroke-width:9;stroke-linecap:round;stroke:var(--green);stroke-dasharray:0 1000;filter:drop-shadow(0 0 8px rgba(0,200,150,.55))}
+.rec-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rec-num{font-size:56px;font-weight:700;letter-spacing:-.03em;color:var(--txt);line-height:1}
+.rec-lbl{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-top:8px}
+.rec-signals{display:flex;gap:12px;width:100%}
+.rec-sig{flex:1;text-align:center;padding:20px 10px;border-radius:18px}
+.rec-sig-val{font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--txt);line-height:1}
+.rec-sig-lbl{font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-top:8px}
+
+/* Genetics visual */
+.genetics{width:100%;padding:42px;display:flex;flex-direction:column;gap:13px}
+.gene-row{display:flex;align-items:center;gap:16px;padding:20px 22px;border-radius:20px}
+.gene-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;box-shadow:0 0 10px rgba(255,255,255,0.25)}
+.gene-name{flex:1;font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--txt)}
+.gene-tag{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--dim);font-family:var(--mono,'JetBrains Mono',monospace)}
+
+/* State visual — three pills */
+.states{display:flex;flex-direction:column;gap:14px;padding:36px;width:100%;height:100%}
+.state-card{padding:20px 24px;border-radius:20px;border:1px solid;position:relative;overflow:hidden;
+  backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+  transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
+.state-card::before{display:none}
+.state-card:hover{transform:translateY(-3px);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%)}
+.state-card.g:hover{box-shadow:0 1px 0 rgba(255,255,255,0.16) inset,0 12px 36px rgba(0,0,0,0.3),0 0 60px rgba(0,200,150,0.2)}
+.state-card.b:hover{box-shadow:0 1px 0 rgba(255,255,255,0.16) inset,0 12px 36px rgba(0,0,0,0.3),0 0 60px rgba(41,121,255,0.2)}
+.state-card.p:hover{box-shadow:0 1px 0 rgba(255,255,255,0.16) inset,0 12px 36px rgba(0,0,0,0.3),0 0 60px rgba(124,92,252,0.2)}
+.state-card.g{background:rgba(0,200,150,.06);border-color:rgba(0,200,150,.32);box-shadow:0 1px 0 rgba(255,255,255,0.16) inset,0 8px 24px rgba(0,0,0,0.22),0 0 48px rgba(0,200,150,0.1)}
+.state-card.b{background:rgba(41,121,255,.06);border-color:rgba(41,121,255,.32);box-shadow:0 1px 0 rgba(255,255,255,0.16) inset,0 8px 24px rgba(0,0,0,0.22),0 0 48px rgba(41,121,255,0.1)}
+.state-card.p{background:rgba(124,92,252,.06);border-color:rgba(124,92,252,.32);box-shadow:0 1px 0 rgba(255,255,255,0.16) inset,0 8px 24px rgba(0,0,0,0.22),0 0 48px rgba(124,92,252,0.1)}
+.state-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.state-dot{width:10px;height:10px;border-radius:50%}
+.state-card.g .state-dot{background:var(--green);box-shadow:0 0 8px var(--green)}
+.state-card.b .state-dot{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.state-card.p .state-dot{background:var(--pink);box-shadow:0 0 8px var(--pink)}
+.state-name{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.state-card.g .state-name{color:var(--green)}
+.state-card.b .state-name{color:var(--accentHi)}
+.state-card.p .state-name{color:var(--pink)}
+.state-desc{font-size:13px;font-weight:400;line-height:1.5;color:var(--sub)}
+
+/* ── PATENT — simple, clear ──────────────────────────────────────────────── */
+#patent{
+  max-width:760px;margin:0 auto;
+  padding:clamp(80px,12vw,120px) clamp(20px,5vw,40px);text-align:center;
+}
+.patent-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;letter-spacing:-.005em;
+  color:var(--green);background:rgba(0,230,118,0.08);
+  border:1px solid rgba(0,230,118,0.22);
+  padding:8px 18px;border-radius:980px;margin-bottom:28px;
+}
+.patent-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.patent-h{
+  font-size:clamp(30px,4.5vw,48px);font-weight:700;
+  line-height:1.08;letter-spacing:-.03em;color:var(--txt);margin-bottom:20px;
+}
+.patent-sub{
+  font-size:clamp(17px,2vw,20px);font-weight:400;line-height:1.55;
+  letter-spacing:-.01em;color:var(--sub);max-width:40ch;margin:0 auto 24px;
+}
+.patent-num{
+  font-size:14px;font-weight:500;letter-spacing:-.005em;color:var(--dim);
+  font-family:var(--mono,'JetBrains Mono',monospace);
+}
+
+/* ── CLOSING CTA ─────────────────────────────────────────────────────────── */
+#cta{
+  text-align:center;padding:clamp(80px,12vw,140px) clamp(20px,5vw,40px);
+  position:relative;
+}
+#cta::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:380px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(ellipse,rgba(41,121,255,0.10) 0%,transparent 65%);
+}
+.cta-in{position:relative;z-index:1}
+.cta-h{
+  font-size:clamp(38px,6.5vw,72px);font-weight:700;
+  line-height:1.04;letter-spacing:-.04em;color:var(--txt);margin-bottom:20px;
+}
+.cta-sub{font-size:clamp(18px,2.2vw,22px);font-weight:400;color:var(--sub);line-height:1.5;letter-spacing:-.01em;max-width:28ch;margin:0 auto 60px}
+.cta-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:60px;margin-bottom:60px}
+
+/* ── FOOTER — WHOOP-style ────────────────────────────────────────────────── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:clamp(60px,10vw,80px) clamp(20px,5vw,40px) 0}
+.foot-grid{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:32px 24px;padding-bottom:48px}
+@media(min-width:640px){.foot-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:980px){.foot-grid{grid-template-columns:repeat(5,1fr)}}
+.foot-col h4{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--txt);margin-bottom:18px}
+.foot-col a{display:block;font-size:13.5px;font-weight:400;letter-spacing:-.01em;color:var(--sub);margin-bottom:12px;transition:color .2s}
+.foot-col a:hover{color:var(--txt)}
+.foot-mission{max-width:var(--max);margin:0 auto;padding:40px clamp(20px,5vw,40px);border-top:1px solid var(--border);font-size:clamp(16px,2.4vw,20px);font-weight:400;letter-spacing:-.01em;color:var(--sub);line-height:1.65;max-width:50ch}
+.foot-legal{max-width:var(--max);margin:0 auto;padding:24px clamp(20px,5vw,40px);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.foot-legal-links{display:flex;gap:22px;flex-wrap:wrap}
+.foot-legal-links a{font-size:12px;color:var(--dim);transition:color .2s}
+.foot-legal-links a:hover{color:var(--sub)}
+.foot-copy{font-size:12px;color:var(--dim);letter-spacing:.02em;font-family:var(--mono,'JetBrains Mono',monospace)}
+/* Giant wordmark */
+.wordmark{overflow:hidden;padding:clamp(20px,5vw,60px) 0 0;text-align:center;line-height:.82}
+.wordmark span{
+  font-size:clamp(80px,23vw,340px);font-weight:800;letter-spacing:-.04em;
+  background:linear-gradient(180deg,rgba(255,255,255,0.16) 0%,rgba(255,255,255,0.03) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  display:inline-block;user-select:none;
+}
+.wordmark sup{font-size:.18em;color:rgba(41,121,255,0.5);font-weight:400;vertical-align:super;-webkit-text-fill-color:rgba(41,121,255,0.5)}
+
+/* ── HOW-IT-WORKS EXPLAINER BAND ─────────────────────────────────────────── */
+.explain{max-width:var(--max);margin:0 auto;padding:clamp(80px,12vw,120px) clamp(20px,5vw,40px) clamp(60px,10vw,100px);text-align:center}
+.explain-lead{font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-.025em;color:var(--txt);line-height:1.25;max-width:22ch;margin:0 auto 12px}
+.explain-sub{font-size:18px;font-weight:400;letter-spacing:-.01em;color:var(--sub);max-width:50ch;margin:0 auto 32px;line-height:1.65}
+.explain-hook{font-size:18px;color:var(--sub);max-width:68ch;margin:0 auto 48px;line-height:1.65;font-weight:400}
+.flow{display:grid;grid-template-columns:1fr;gap:14px;align-items:stretch}
+@media(min-width:760px){.flow{grid-template-columns:repeat(3,1fr) auto repeat(1,1fr);gap:10px;align-items:center}}
+.flow-step{padding:30px 24px;border-radius:24px;text-align:center;background:linear-gradient(155deg,rgba(255,255,255,0.07) 0%,rgba(255,255,255,0.02) 100%);border:1px solid rgba(255,255,255,0.1);box-shadow:0 1px 0 rgba(255,255,255,0.16) inset,0 12px 36px rgba(0,0,0,0.32);backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s}
+.flow-step:hover,.flow-result:hover{transform:translateY(-4px)}
+.flow-num{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accentHi);margin-bottom:14px}
+.flow-h{font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--txt);margin-bottom:8px}
+.flow-p{font-size:17px;font-weight:400;line-height:1.6;color:var(--sub)}
+.flow-arrow{display:none;align-items:center;justify-content:center;color:var(--dim);font-size:20px}
+@media(min-width:760px){.flow-arrow{display:flex}}
+.flow-result{padding:30px 24px;border-radius:24px;text-align:center;
+  background:radial-gradient(ellipse 90% 70% at 50% -10%,rgba(0,200,150,0.2) 0%,transparent 60%),linear-gradient(155deg,rgba(0,200,150,0.08),rgba(10,15,28,0.5));
+  border:1px solid rgba(0,200,150,0.34);box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 12px 40px rgba(0,0,0,0.36),0 0 60px rgba(0,200,150,0.12);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%)}
+.flow-result .flow-num{color:var(--green)}
+.flow-plus{display:none}
+@media(min-width:760px){
+  .flow{grid-template-columns:1fr 1fr 1fr auto 1.1fr}
+}
+
+nav,#hero,.explain,.feature,#patent,#cta,footer{position:relative;z-index:1}
+/* ── HEADLINE WORD-BY-WORD REVEAL ────────────────────────────────────────── */
+.hero-words{overflow:hidden}
+.hero-words .word{display:inline-block;overflow:hidden;vertical-align:top}
+.hero-words .word span{
+  display:inline-block;
+  transform:translateY(110%);
+  transition:transform .8s cubic-bezier(.16,1,.3,1);
+}
+.hero-words.go .word span{transform:translateY(0)}
+
+/* ── SHRINKING STICKY NAV ────────────────────────────────────────────────── */
+nav{transition:padding .35s cubic-bezier(.16,1,.3,1),background .4s,backdrop-filter .4s}
+nav .logo{transition:font-size .35s cubic-bezier(.16,1,.3,1)}
+nav.scrolled{padding-top:11px;padding-bottom:11px}
+nav.scrolled .logo{font-size:16px}
+nav.scrolled .nav-cta{padding-top:8px;padding-bottom:8px}
+
+/* ── HERO ORB SPRING ENTRANCE ────────────────────────────────────────────── */
+.orb{opacity:0;transform:scale(0.9)}
+.orb.bloom{opacity:1;transform:scale(1);transition:opacity .9s ease,transform 1.1s cubic-bezier(.34,1.56,.64,1)}
+
+/* ── SCROLL-SNAP between feature sections ────────────────────────────────── */
+@media(min-width:860px) and (prefers-reduced-motion:no-preference){
+  html{scroll-snap-type:y proximity}
+  .feature{scroll-snap-align:center;scroll-snap-stop:normal}
+}
+
+/* ── REVEAL ──────────────────────────────────────────────────────────────── */
+/* Feature visuals: once revealed, transform is driven by JS parallax — drop the
+   transform transition so scroll tracking is crisp (opacity still eases). */
+.feature-visual.on{transition:opacity .9s cubic-bezier(.16,1,.3,1);will-change:transform}
+/* Pointer-tracking specular glow that follows the cursor across the glass */
+.visual-card{--mx:30%;--my:0%}
+.visual-card .glow-pointer{
+  position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(380px circle at var(--mx) var(--my),rgba(255,255,255,0.10) 0%,transparent 60%);
+  opacity:0;transition:opacity .4s;
+}
+.visual-card:hover .glow-pointer{opacity:1}
+.r{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.r.on{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+@media(prefers-reduced-motion:reduce){
+  .orb-halo,.orb-body{animation:none}
+  .r{transition:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">LIV.U<sup>®</sup></div>
+  <a class="nav-cta" href="#athlete-state">ATHLETE STATE</a>
+</nav>
+
+<!-- ══ HERO ════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="orb" id="heroOrb">
+    <div class="orb-halo"></div>
+    <div class="orb-body"></div>
+    <div class="orb-in">
+      <div class="orb-num" id="heroNum">82</div>
+      <div class="orb-state" id="heroState">Recovered</div>
+    </div>
+  </div>
+  <div class="hero-pre r d1">ATHLETIC INTELLIGENCE PLATFORM</div>
+  <h1 class="hero-h hero-words">Decode Recovery.</h1>
+  <p class="hero-sub r d2">Our platform fuses real-time wearable metrics, environmental factors, and genomic architecture into an elite readiness engine. Engineered for runners, swimmers, cyclists, and lifters, it eliminates the guesswork of traditional tracking. Maximize your recovery. Elevate your performance. Conquer your limits every single day.</p>
+  <div class="hero-ctas r d3">
+    <a class="link" href="livus-how-it-works.html">Learn how it works <span class="arr">›</span></a>
+  </div>
+</section>
+
+
+
+<!-- ══ STORY 2 — The Athlete's Journey ════════════════════════════════════ -->
+<section id="story-2" style="position:relative;width:100%" style="background:#070B14;padding:0">
+  <div style="overflow-x:auto;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--accent) transparent">
+    <div style="display:flex;gap:0;min-width:min-content">
+
+        <!-- Card 1: The Soul -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(7,14,43,0.85) 0%,rgba(11,17,36,0.75) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:100vh;padding:clamp(60px,10vw,100px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:#FFB800;opacity:0.6;line-height:0.9;margin-bottom:clamp(16px,3vh,24px)">01</div>
+            </div>
+          <div style="text-align:left;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(16px,3vh,24px);max-width:clamp(300px,90%,1000px);margin:0 auto">
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.85);line-height:1.75;font-weight:500">
+              Your body is talking every morning. Signals about sleep, recovery, readiness. Most athletes ignore these whispers. We listen.
+            </p>
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.8);line-height:1.75;font-weight:500">
+              That fire, that focus, that grit—it comes from understanding how you actually feel. Not from guessing.
+            </p>
+          </div>
+          <div style="margin-top:auto;text-align:center;font-size:clamp(16px,3.5vw,22px);color:rgba(206,216,234,0.4)">↓ Scroll →</div>
+        </div>
+
+        <!-- Card 2: The Pulse -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(7,14,43,0.85) 0%,rgba(20,30,50,0.75) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:100vh;padding:clamp(60px,10vw,100px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:#5FA8FF;line-height:0.9;margin-bottom:8px">02</div>
+            </div>
+          <div style="text-align:left;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(16px,3vh,24px);max-width:clamp(300px,90%,1000px);margin:0 auto">
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.85);line-height:1.75;font-weight:500">
+              Your wearables capture the continuous symphony of your autonomic nervous system. Heart rate variability, resting pulse, sleep stages, respiratory patterns.
+            </p>
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.8);line-height:1.75;font-weight:500">
+              We aggregate it with clinical precision. Raw data becomes actionable intelligence.
+            </p>
+          </div>
+          <div style="margin-top:auto;text-align:center;font-size:clamp(16px,3.5vw,22px);color:rgba(206,216,234,0.4)">↓ Scroll →</div>
+        </div>
+
+        <!-- Card 3: The Blueprint -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(7,14,43,0.85) 0%,rgba(30,40,60,0.75) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:100vh;padding:clamp(60px,10vw,100px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:#00E676;line-height:0.9;margin-bottom:8px">03</div>
+            </div>
+          <div style="text-align:left;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(16px,3vh,24px);max-width:clamp(300px,90%,1000px);margin:0 auto">
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.85);line-height:1.75;font-weight:500">
+              Your genes reveal how your specific body adapts to stress, builds muscle, recovers. Key markers like ACTN3, ACE, and IL-6 variation matter.
+            </p>
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.8);line-height:1.75;font-weight:500">
+              We compare you to you. Not to averages. That's hyper-personalization.
+            </p>
+          </div>
+          <div style="margin-top:auto;text-align:center;font-size:clamp(16px,3.5vw,22px);color:rgba(206,216,234,0.4)">↓ Scroll →</div>
+        </div>
+
+        <!-- Card 4: The Apex -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(30,20,50,0.85) 0%,rgba(40,30,60,0.75) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:100vh;padding:clamp(60px,10vw,100px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:#D500F9;line-height:0.9;margin-bottom:8px">04</div>
+            </div>
+          <div style="text-align:left;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(16px,3vh,24px);max-width:clamp(300px,90%,1000px);margin:0 auto">
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.85);line-height:1.75;font-weight:500">
+              Three pillars converge: your voice, your real-time data, your genetic blueprint. Our proprietary formula arbitrates them into a single, elegant State.
+            </p>
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.8);line-height:1.75;font-weight:500">
+              No more noise. No more guessing. Just clarity.
+            </p>
+          </div>
+          <div style="margin-top:auto;text-align:center;font-size:clamp(16px,3.5vw,22px);color:rgba(206,216,234,0.4)">↓ Scroll →</div>
+        </div>
+
+        <!-- Card 5: The Horizon -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(41,121,255,0.15) 0%,rgba(30,40,80,0.15) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:100vh;padding:clamp(60px,10vw,100px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:#5FA8FF;line-height:0.9;margin-bottom:8px">05</div>
+          </div>
+          <div style="text-align:left;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(16px,3vh,24px);max-width:clamp(300px,90%,1000px);margin:0 auto">
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.85);line-height:1.75;font-weight:500">
+              We're not here yet—but we're building toward it. An autonomous ecosystem that anticipates fatigue before it manifests. Customizes your optimization in real time.
+            </p>
+            <p style="font-size:clamp(18px,4vw,24px);color:rgba(206,216,234,0.8);line-height:1.75;font-weight:500">
+              The era of absolute physiological truth has arrived.
+            </p>
+          </div>
+          <div style="text-align:center">
+            <a href="livus-begin-onboarding.html" style="display:inline-block;padding:clamp(14px,3.5vw,18px) clamp(32px,7vw,48px);background:rgba(41,121,255,0.12);color:#5FA8FF;border-radius:980px;font-size:clamp(14px,3vw,16px);font-weight:600;border:none;text-decoration:none;transition:all 300ms;cursor:pointer">Begin Your Journey →</a>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ══ BLOCK 1 — EFFORT (text left, visual right) ═════════════════════════ -->
+<section class="feature" id="effort">
+  <div class="feature-text r">
+    <div class="f-eyebrow blue">Track your effort</div>
+    <h2 class="f-h">Every mile. Every rep. One view.</h2>
+    <p class="f-sub">Run, ride, swim, or lift — LIV.U pulls every session from your wearable into one seamless picture, automatically. No manual logging.</p>
+  </div>
+  <div class="feature-visual r d1">
+    <div class="visual-card"><div class="glow-pointer"></div>
+      <div class="effort">
+        <div class="effort-row">
+          <div class="effort-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accentHi)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4l-1 5h4l-5 11 1-7H8z"/></svg></div>
+          <div class="effort-meta"><div class="effort-name">Morning Run</div><div class="effort-bar"><div class="effort-fill" style="width:82%"></div></div></div>
+          <div class="effort-val">8.2mi</div>
+        </div>
+        <div class="effort-row">
+          <div class="effort-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accentHi)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-7h5l3 7M10 10l-2-4"/></svg></div>
+          <div class="effort-meta"><div class="effort-name">Afternoon Ride</div><div class="effort-bar"><div class="effort-fill" style="width:64%"></div></div></div>
+          <div class="effort-val">24mi</div>
+        </div>
+        <div class="effort-row">
+          <div class="effort-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accentHi)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10M18 7v10M4 9v6M20 9v6M6 12h12"/></svg></div>
+          <div class="effort-meta"><div class="effort-name">Strength</div><div class="effort-bar"><div class="effort-fill" style="width:48%"></div></div></div>
+          <div class="effort-val">42min</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BLOCK 2 — RECOVERY (visual left, text right) ═══════════════════════ -->
+<section class="feature flip" id="recovery">
+  <div class="feature-text r">
+    <div class="f-eyebrow green">Read your recovery</div>
+    <h2 class="f-h">Know when to push. And when to rest.</h2>
+    <p class="f-sub">LIV.U turns your overnight HRV, heart rate, and sleep into one readiness score — so you train hard on good days and back off before you burn out.</p>
+  </div>
+  <div class="feature-visual r d1">
+    <div class="visual-card"><div class="glow-pointer"></div>
+      <div class="recovery">
+        <div class="rec-ring-wrap">
+          <svg class="rec-ring" viewBox="0 0 200 200">
+            <circle class="rec-track" cx="100" cy="100" r="88"/>
+            <circle class="rec-prog" id="recRing" cx="100" cy="100" r="88"/>
+          </svg>
+          <div class="rec-center">
+            <div class="rec-num">82</div>
+            <div class="rec-lbl">Recovered</div>
+          </div>
+        </div>
+        <div class="rec-signals">
+          <div class="rec-sig glass-inner"><div class="rec-sig-val">58</div><div class="rec-sig-lbl">HRV</div></div>
+          <div class="rec-sig glass-inner"><div class="rec-sig-val">48</div><div class="rec-sig-lbl">RHR</div></div>
+          <div class="rec-sig glass-inner"><div class="rec-sig-val">7.5h</div><div class="rec-sig-lbl">Sleep</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BLOCK 3 — GENETICS (text left, visual right) ═══════════════════════ -->
+<section class="feature" id="genetics">
+  <div class="feature-text r">
+    <div class="f-eyebrow pink">Tuned to your DNA</div>
+    <h2 class="f-h">A score that's actually yours.</h2>
+    <p class="f-sub">The same heart rate means different things in different bodies. Add your DNA and every reading is calibrated to how <em>you</em> recover — not an average. It's optional, and the score works without it.</p>
+    <a class="link" href="livus-athlete-comparison.html">Athlete comparison <span class="arr">›</span></a>
+  </div>
+  <div class="feature-visual r d1">
+    <div class="visual-card"><div class="glow-pointer"></div>
+      <div class="genetics">
+        <div class="gene-row glass-inner"><div class="gene-dot" style="background:var(--green)"></div><div class="gene-name">Power &amp; Muscle</div><div class="gene-tag">ACTN3</div></div>
+        <div class="gene-row glass-inner"><div class="gene-dot" style="background:var(--accent)"></div><div class="gene-name">Recovery Speed</div><div class="gene-tag">IL-6</div></div>
+        <div class="gene-row glass-inner"><div class="gene-dot" style="background:var(--pink)"></div><div class="gene-name">Tendon Resilience</div><div class="gene-tag">COL1A1</div></div>
+        <div class="gene-row glass-inner"><div class="gene-dot" style="background:var(--accentHi)"></div><div class="gene-name">Endurance</div><div class="gene-tag">ACE</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BLOCK 4 — STATES (visual left, text right) ═════════════════════════ -->
+<section class="feature flip" id="states">
+  <div class="feature-text r">
+    <div class="f-eyebrow blue">The result · Your daily plan</div>
+    <h2 class="f-h">One word tells you what to do.</h2>
+    <p class="f-sub">No charts to decode. Each morning you get one state — and exactly what to do about it: go hard, hold steady, or recover.</p>
+  </div>
+  <div class="feature-visual r d1">
+    <div class="visual-card"><div class="glow-pointer"></div>
+      <div class="states">
+        <div class="state-card g"><div class="state-top"><div class="state-dot"></div><div class="state-name">Recovered</div></div><div class="state-desc">Fully charged. Go for your hardest session.</div></div>
+        <div class="state-card b"><div class="state-top"><div class="state-dot"></div><div class="state-name">Balanced</div></div><div class="state-desc">Steady and stable. Hold your planned effort.</div></div>
+        <div class="state-card p"><div class="state-top"><div class="state-dot"></div><div class="state-name">Adapt</div></div><div class="state-desc">Ease off today. Protect your baseline.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STORY CARDS — Horizontal Scroll ════════════════════════════════════ -->
+<section id="story-cards" style="background:#070B14;padding:0">
+  <div style="overflow-x:auto;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--accent) transparent">
+    <div style="display:flex;gap:0;min-width:min-content">
+
+        <!-- Card 1: The Origin -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(14,20,36,0.85) 0%,rgba(20,20,40,0.75) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:50vh;padding:clamp(40px,8vw,50px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:var(--accentHi);line-height:0.9;margin-bottom:8px">01</div>
+            <h3 style="font-size:clamp(24px,7vw,34px);font-weight:700;color:#fff;letter-spacing:-.01em;line-height:1.1;margin-bottom:clamp(8px,2vh,16px)">The Origin</h3>
+          </div>
+          <div style="text-align:center;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(6px,1.5vh,10px)">
+            <p style="font-size:clamp(16px,4vw,20px);color:rgba(206,216,234,0.85);line-height:1.7;font-weight:500">
+              We didn't just build a platform—we lived the problem. Forged in elite athletics and medicine, we saw firsthand that traditional recovery is broken, leaving athletes reliant on guesswork and reactive data. Driven by the conviction that there had to be a better way, we engineered LIVUᔆ to replace intuition with absolute biometric precision.
+            </p>
+          </div>
+          <div style="margin-top:auto;text-align:center;font-size:clamp(16px,3.5vw,22px);color:rgba(206,216,234,0.4)">↓ Scroll →</div>
+        </div>
+
+        <!-- Card 2: The Architecture -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(14,20,36,0.85) 0%,rgba(20,30,50,0.75) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:50vh;padding:clamp(40px,8vw,50px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:var(--green);line-height:0.9;margin-bottom:8px">02</div>
+            <h3 style="font-size:clamp(24px,7vw,34px);font-weight:700;color:#fff;letter-spacing:-.01em;line-height:1.1;margin-bottom:clamp(8px,2vh,16px)">The Architecture</h3>
+          </div>
+          <div style="text-align:center;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(8px,2vh,12px)">
+            <p style="font-size:clamp(16px,4vw,20px);color:rgba(206,216,234,0.85);line-height:1.7;font-weight:500">
+              Your wearables capture the continuous symphony of your autonomic nervous system—HRV, resting pulse, sleep, and respiratory patterns.
+            </p>
+            <p style="font-size:clamp(16px,4vw,20px);color:rgba(206,216,234,0.8);line-height:1.7;font-weight:500">
+              We aggregate it with clinical precision. Raw telemetry becomes actionable intelligence.
+            </p>
+          </div>
+          <div style="margin-top:auto;text-align:center;font-size:clamp(16px,3.5vw,22px);color:rgba(206,216,234,0.4)">↓ Scroll →</div>
+        </div>
+
+        <!-- Card 3: The Future -->
+        <div style="flex:0 0 100vw;background:linear-gradient(135deg,rgba(14,20,36,0.85) 0%,rgba(30,30,50,0.75) 100%);display:flex;flex-direction:column;justify-content:flex-start;min-height:50vh;padding:clamp(40px,8vw,50px) clamp(20px,5vw,40px)">
+          <div>
+            <div style="font-size:clamp(32px,10vw,56px);font-weight:700;color:var(--pink);line-height:0.9;margin-bottom:8px">03</div>
+            <h3 style="font-size:clamp(24px,7vw,34px);font-weight:700;color:#fff;letter-spacing:-.01em;line-height:1.1;margin-bottom:clamp(8px,2vh,16px)">The Future</h3>
+          </div>
+          <div style="text-align:center;flex:0;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(8px,2vh,12px)">
+            <p style="font-size:clamp(16px,4vw,20px);color:rgba(206,216,234,0.85);line-height:1.75;font-weight:500">
+              The future of sport is predictive, not reactive. We're building toward an autonomous Athletic Intelligence Platform. One that anticipates fatigue before it manifests. Customizes your optimization in real time.
+            </p>
+            <p style="font-size:clamp(16px,4vw,20px);color:rgba(206,216,234,0.8);line-height:1.75;font-weight:500">
+              The era of absolute physiological truth is here.
+            </p>
+          </div>
+          <div style="margin-top:auto;text-align:center;font-size:clamp(16px,3.5vw,22px);color:rgba(206,216,234,0.4)">↓ Scroll →</div>
+        </div>
+
+    </div>
+  </div>
+</section>
+
+    <div style="display:flex;justify-content:center;gap:8px;margin-top:32px">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:0.3"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:0.3"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:0.3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════════════════════════════ -->
+<section id="cta">
+  <div class="cta-in">
+    <h2 class="cta-h r">Your clearest morning starts here.</h2>
+    <p class="cta-sub r d1">One number. One action. Every day.</p>
+    <div class="cta-ctas r d2">
+      <a class="link" href="mailto:brianlentz1@gmail.com">Contact our team <span class="arr">›</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PATENT — simple ════════════════════════════════════════════════════ -->
+<section id="patent">
+  <div class="patent-badge r"><span class="patent-badge-dot"></span>Patent Pending</div>
+  <div class="patent-num r d2">U.S. Patent Application No. 64/088,876</div>
+</section>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>Platform</h4>
+      <a href="livus-v3.html">Overview</a>
+      <a href="livus-how-it-works.html">How It Works</a>
+      <a href="livus-inputs.html">What We Measure</a>
+      <a href="livus-athlete-comparison.html">The Showdown</a>
+      <a href="livus-connect-help.html">Connect Your Devices</a>
+      <a href="livus-onboarding.html">Sign Up</a>
+    </div>
+    <div class="foot-col">
+      <h4>Company</h4>
+      <a href="mailto:brian@livu.io">Our Mission</a>
+      <a href="mailto:brian@livu.io">Careers</a>
+      <a href="mailto:brian@livu.io">Press</a>
+      <a href="mailto:brian@livu.io">Contact</a>
+    </div>
+    <div class="foot-col">
+      <h4>Support</h4>
+      <a href="mailto:brian@livu.io">Member Support</a>
+      <a href="livus-onboarding.html">Connect a Device</a>
+      <a href="livus-onboarding.html">Genetic Upload Help</a>
+      <a href="mailto:brian@livu.io">Member Login</a>
+    </div>
+    <div class="foot-col">
+      <h4>Legal</h4>
+      <a href="#">Terms of Use</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">HIPAA Notice</a>
+      <a href="#">Security</a>
+      <a href="#">Patent</a>
+    </div>
+    <div class="foot-col">
+      <h4>Partner</h4>
+      <a href="mailto:brian@livu.io">Teams &amp; Clubs</a>
+      <a href="mailto:brian@livu.io">Become an Affiliate</a>
+      <a href="mailto:brian@livu.io">Research</a>
+      <a href="mailto:brian@livu.io">Gift LIV.U</a>
+    </div>
+  </div>
+  <div class="foot-mission">Our mission at LIV.U is to bridge the gap between who you are today and who you are capable of becoming. We engineer the tools to help you live fiercer, feel younger, and thrive longer.</div>
+  <div class="foot-legal">
+    <div class="foot-copy">© 2026 LIV.U · Philadelphia, PA · Patent Pending No. 64/088,876</div>
+    <div class="foot-legal-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+  <div class="wordmark"><span>LIVU.io<sup>s</sup></span></div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// ORB STATE ENGINE — Dynamic Team Color + Athlete Metrics Arbitration
+// ══════════════════════════════════════════════════════════════════════════════
+
+// Athlete recovery state enumeration
+let currentAthleteState = 'optimal'; // 'optimal', 'strain', 'suppression'
+
+// Identity color mapping (default: La Salle University)
+let currentIdentityColors = {
+  primary: '#0A143A',    /* Navy/Dark blue base */
+  secondary: '#C5A059',  /* Gold/accent color */
+  ambient: '#FFFFFF'     /* Premium rim/edge glow */
+};
+
+/**
+ * Orb State Engine: Recalculates and updates orb CSS variables based on:
+ * 1. Team identity (alma mater / club colors)
+ * 2. Current athlete physiological state
+ * 3. Sympathetic/parasympathetic balance
+ */
+function renderOrbEngineState(targetPreviewId) {
+  const targetOrb = document.getElementById(targetPreviewId);
+  if (!targetOrb) return;
+
+  let c1, c2, c3;
+
+  // Clear previous state animations
+  targetOrb.classList.remove('state-optimal', 'state-strain', 'state-suppression');
+
+  // Engine arbitration logic: Team colors + Athlete state = final orb appearance
+  switch (currentAthleteState) {
+    case 'strain':
+      // Sympathetic overload: Team colors stay primary, LIV.U Volt injects into slot 3
+      c1 = currentIdentityColors.primary;
+      c2 = currentIdentityColors.secondary;
+      c3 = '#BAFF02'; // Bright volt warns of excessive stress/strain
+      targetOrb.classList.add('state-strain');
+      break;
+      
+    case 'suppression':
+      // Parasympathetic suppression: Core darkens, team color pushed to secondary
+      c1 = '#111625'; // Dead dark smoke core (recovery mode)
+      c2 = currentIdentityColors.primary; // Original team color moves to middle
+      c3 = '#5A6475'; // Muted slate rim (dampened energy)
+      targetOrb.classList.add('state-suppression');
+      break;
+
+    case 'optimal':
+    default:
+      // Golden state: Full team colors + premium ambient glow
+      c1 = currentIdentityColors.primary;
+      c2 = currentIdentityColors.secondary;
+      c3 = currentIdentityColors.ambient;
+      targetOrb.classList.add('state-optimal');
+      break;
+  }
+
+  // Inject CSS variables onto the specific DOM element for dynamic rendering
+  targetOrb.style.setProperty('--orb-c1', c1);
+  targetOrb.style.setProperty('--orb-c2', c2);
+  targetOrb.style.setProperty('--orb-c3', c3);
+}
+
+/**
+ * School selection callback (Step 1 - Alma Mater)
+ * Maps college colors to identity, renders in optimal state
+ */
+function selectSchoolWithState(name, colorPrimary, colorSecondary) {
+  orbData.almaMater = name;
+  
+  currentIdentityColors.primary = colorPrimary;
+  currentIdentityColors.secondary = colorSecondary;
+  currentIdentityColors.ambient = '#FFFFFF'; // Premium glass rim
+
+  // Default to optimal state when setting college identity
+  currentAthleteState = 'optimal';
+  renderOrbEngineState('orbPreview1');
+  updateOptionCards('school');
+}
+
+/**
+ * Team selection callback (Step 2 - Professional Club)
+ * Maps team colors, previews under strain state to show real-world readiness
+ */
+function selectTeamWithState(name, colorPrimary, colorSecondary) {
+  orbData.team = name;
+  
+  currentIdentityColors.primary = colorPrimary;
+  currentIdentityColors.secondary = colorSecondary;
+  
+  // Show how team colors look under sympathetic strain (realistic preview)
+  currentAthleteState = 'strain';
+  renderOrbEngineState('orbPreview2');
+  document.getElementById('customHexSection').style.display = 'none';
+  updateOptionCards('teamType');
+}
+
+/**
+ * Simulate state transitions on hero orb (real-time demo)
+ * Cycles through: optimal → strain → suppression → optimal
+ */
+function cycleHeroOrbState() {
+  const states = ['optimal', 'strain', 'suppression'];
+  const idx = states.indexOf(currentAthleteState);
+  currentAthleteState = states[(idx + 1) % states.length];
+  renderOrbEngineState('heroOrb');
+  
+  // Update hero text to reflect state
+  updateHeroState();
+}
+
+function updateHeroState() {
+  const stateEl = document.getElementById('heroState');
+  if (!stateEl) return;
+  
+  switch(currentAthleteState) {
+    case 'optimal':
+      stateEl.textContent = 'Optimal';
+      stateEl.style.color = '#00E676';
+      break;
+    case 'strain':
+      stateEl.textContent = 'Strain';
+      stateEl.style.color = '#BAFF02';
+      break;
+    case 'suppression':
+      stateEl.textContent = 'Suppression';
+      stateEl.style.color = '#5A6475';
+      break;
+  }
+}
+
+// Initialize hero orb on page load
+document.addEventListener('DOMContentLoaded', () => {
+  renderOrbEngineState('heroOrb');
+  
+  // Optional: Demo mode - click orb to cycle states
+  const heroOrb = document.getElementById('heroOrb');
+  if (heroOrb) {
+    heroOrb.style.cursor = 'pointer';
+    heroOrb.addEventListener('click', cycleHeroOrbState);
+  }
+});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LIVUS-V3: APPLE PREMIUM SCROLL & MOTION ENHANCEMENTS
+// ══════════════════════════════════════════════════════════════════════════════
+
+const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ── 1. HERO PARALLAX SCROLL ───────────────────────────────────────────────────
+// Hero background moves at 30% of scroll speed → creates depth illusion
+if (!prefersReduced) {
+  const hero = document.getElementById('hero');
+  if (hero) {
+    let ticking = false;
+    function heroParallax() {
+      const heroRect = hero.getBoundingClientRect();
+      if (heroRect.bottom > 0) {
+        const scrolled = Math.max(0, -heroRect.top);
+        hero.style.backgroundPosition = `center ${scrolled * 0.3}px`;
+      }
+      ticking = false;
+    }
+    hero.style.backgroundAttachment = 'scroll';
+    addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(heroParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+}
+
+// ── 2. SECTION SCALE + FADE ENTRANCE ──────────────────────────────────────────
+// Sections fade in AND scale from 0.95 to 1.0 as they scroll into view (premium)
+if (!prefersReduced) {
+  const style = document.createElement('style');
+  style.textContent = `
+    .feature {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .feature.on {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    /* Text reveal for headings */
+    .hero-words { perspective: 800px; }
+    .word {
+      display: inline-block;
+      overflow: hidden;
+      height: 1.1em;
+      margin: 0 0.2em;
+    }
+    .word > span {
+      display: block;
+      animation: wordReveal 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    .hero-words.go .word > span {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @keyframes wordReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(100%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Staggered card entrance */
+    .state-card {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      animation: cardReveal 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    
+    @keyframes cardReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// ── 3. STAGGERED CARD ENTRANCE ────────────────────────────────────────────────
+// State cards appear one-by-one with 100-150ms stagger (premium feel)
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const stateCards = entry.target.querySelectorAll('.state-card');
+      stateCards.forEach((card, index) => {
+        card.style.animationDelay = (index * 0.12) + 's';
+      });
+      cardObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.states').forEach(states => {
+  cardObserver.observe(states);
+});
+
+// ── 4. HEADER HIDE ON SCROLL DOWN ─────────────────────────────────────────────
+// Nav hides when scrolling down, shows on scroll up (Apple News style)
+if (!prefersReduced) {
+  const nav = document.getElementById('nav');
+  if (nav) {
+    let lastScrollY = 0;
+    let isHidden = false;
+    
+    addEventListener('scroll', () => {
+      const currentScrollY = scrollY;
+      
+      // Show nav when at top
+      if (currentScrollY < 100) {
+        if (isHidden) {
+          nav.style.transform = 'translateY(0)';
+          isHidden = false;
+        }
+        return;
+      }
+      
+      // Hide when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY + 10 && !isHidden) {
+        // Scrolling down
+        nav.style.transform = 'translateY(-100%)';
+        isHidden = true;
+      } else if (currentScrollY < lastScrollY - 10 && isHidden) {
+        // Scrolling up
+        nav.style.transform = 'translateY(0)';
+        isHidden = false;
+      }
+      
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+    
+    nav.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+  }
+}
+
+// ── 5. TEXT REVEAL ANIMATIONS (HEADING WORDS) ─────────────────────────────────
+// Heading words appear word-by-word as sections scroll in (Vercel/Apple style)
+if (!prefersReduced) {
+  // Split all feature headings into words
+  document.querySelectorAll('.f-h').forEach(heading => {
+    const text = heading.textContent;
+    const words = text.split(' ');
+    heading.innerHTML = words.map(word => 
+      `<span class="reveal-word" style="display: inline-block; overflow: hidden; margin-right: 0.2em;">
+        <span style="display: block; animation: slideUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; opacity: 0; transform: translateY(100%);">
+          ${word}
+        </span>
+      </span>`
+    ).join('');
+  });
+}
+
+// Add keyframes for text reveal
+const revealStyle = document.createElement('style');
+revealStyle.textContent = `
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+document.head.appendChild(revealStyle);
+
+// Trigger word reveal on section scroll
+const textRevealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const heading = entry.target.querySelector('.f-h');
+      if (heading) {
+        const revealWords = heading.querySelectorAll('.reveal-word span');
+        revealWords.forEach((word, index) => {
+          word.style.animationDelay = (0.05 + index * 0.08) + 's';
+        });
+      }
+      textRevealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.feature').forEach(feature => {
+  textRevealObserver.observe(feature);
+});
+
+// ── EXISTING FUNCTIONALITY (Hero entrance) ────────────────────────────────────
+(function(){
+  const hw = document.querySelector('.hero-words');
+  if (hw && !hw.classList.contains('go')) {
+    if (prefersReduced) {
+      hw.classList.add('go');
+    } else {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => hw.classList.add('go'));
+      });
+    }
+  }
+  
+  const orb = document.getElementById('heroOrb');
+  const orbBody = orb?.querySelector('.orb-body');
+  const orbNum = orb?.querySelector('.orb-num');
+  const orbState = orb?.querySelector('.orb-state');
+  
+  if (orb && orbBody) {
+    if (prefersReduced) {
+      orb.style.opacity = 1;
+      orb.style.transform = 'none';
+    } else {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => orb.classList.add('bloom'));
+      });
+    }
+    
+    // ── PHYSIOLOGICAL TELEMETRY SYSTEM ──────────────────────────────────────
+    // Simulates real HRV, HR, and sleep data to drive orb state transitions
+    // In production, this would connect to Apple HealthKit, Garmin, WHOOP, Oura
+    
+    class OrbTelemetry {
+      constructor(orbBody, orbNum, orbState) {
+        this.orbBody = orbBody;
+        this.orbNum = orbNum;
+        this.orbState = orbState;
+        
+        // Physiological baselines
+        this.hrv = 65;           // HRV (ms) — higher = better recovery
+        this.hr = 58;            // Resting heart rate
+        this.sleepScore = 82;    // Sleep quality 0-100
+        this.recoveryScore = 82; // LIV.U composite score
+        
+        // State machine
+        this.currentState = 'recovered';
+        this.states = {
+          'recovered': {score: 90, label: 'Recovered', color: '#00E676'},
+          'balanced': {score: 75, label: 'Balanced', color: '#2979FF'},
+          'adapt': {score: 60, label: 'Adapt', color: '#D500F9'},
+          'recover': {score: 40, label: 'Recover', color: '#FF6D00'},
+          'restore': {score: 20, label: 'Restore', color: '#FF1744'}
+        };
+        
+        this.init();
+      }
+      
+      init() {
+        if (!prefersReduced) {
+          // Initial state
+          this.updateState();
+          
+          // Simulate telemetry changes every 8-12 seconds
+          setInterval(() => this.simulateTelemetry(), 8000 + Math.random() * 4000);
+          
+          // Autonomic breathing syncs to respiratory rhythm
+          // Base cycle: 6s (0.167 Hz) = 10 breaths/min
+          // Can accelerate to 5.2s or 4.8s based on activity state
+        }
+      }
+      
+      simulateTelemetry() {
+        // Mimic real physiological variation
+        // Morning: stable high HRV, low HR
+        // Activity: variable HRV, elevated HR
+        
+        // Drift HRV slightly
+        this.hrv += (Math.random() - 0.5) * 8;
+        this.hrv = Math.max(40, Math.min(100, this.hrv));
+        
+        // Drift HR slightly
+        this.hr += (Math.random() - 0.5) * 3;
+        this.hr = Math.max(50, Math.min(80, this.hr));
+        
+        // Calculate recovery score based on telemetry
+        const hrvScore = (this.hrv / 100) * 40;
+        const hrScore = ((80 - this.hr) / 30) * 30;
+        const sleepBonus = (this.sleepScore / 100) * 30;
+        
+        this.recoveryScore = hrvScore + hrScore + sleepBonus;
+        this.recoveryScore = Math.max(20, Math.min(100, Math.round(this.recoveryScore)));
+        
+        this.updateState();
+      }
+      
+      updateState() {
+        let newState = 'recovered';
+        
+        if (this.recoveryScore >= 85) newState = 'recovered';
+        else if (this.recoveryScore >= 70) newState = 'balanced';
+        else if (this.recoveryScore >= 55) newState = 'adapt';
+        else if (this.recoveryScore >= 35) newState = 'recover';
+        else newState = 'restore';
+        
+        // Trigger spring animation on state change
+        if (newState !== this.currentState) {
+          this.orbBody.classList.remove('active', 'synced');
+          this.orbBody.classList.add(newState === 'recovered' ? 'active' : 'synced');
+          
+          // Brief animation pulse
+          this.orbBody.style.animation = 'none';
+          requestAnimationFrame(() => {
+            const cycle = newState === 'recovered' ? 5.2 : 4.8;
+            this.orbBody.style.animation = `autonomicBreath ${cycle}s cubic-bezier(0.42, 0, 0.58, 1) infinite, springBoost 0.6s cubic-bezier(0.34,1.56,0.64,1) 1`;
+          });
+        }
+        
+        this.currentState = newState;
+        
+        // Update display
+        this.orbNum.textContent = this.recoveryScore;
+        this.orbState.textContent = this.states[newState].label;
+        this.orbState.style.color = this.states[newState].color;
+      }
+    }
+    
+    // Instantiate telemetry system
+    if (!prefersReduced) {
+      new OrbTelemetry(orbBody, orbNum, orbState);
+    }
+  }
+})();
+
+// Nav scroll class toggle
+addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  if (nav) nav.classList.toggle('scrolled', scrollY > 40);
+}, { passive: true });
+
+// ── EXISTING: Scroll reveal animations ─────────────────────────────────────────
+const io = new IntersectionObserver(
+  es => es.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('on');
+  }),
+  { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+);
+document.querySelectorAll('.r').forEach(el => io.observe(el));
+
+// ── EXISTING: Animate rings ───────────────────────────────────────────────────
+function animateRing(id, pct, r) {
+  const ring = document.getElementById(id);
+  if (!ring) return;
+  const circ = 2 * Math.PI * r;
+  let start = null;
+  requestAnimationFrame(function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min(1, (ts - start) / 1600);
+    const e = 1 - Math.pow(1 - p, 3);
+    ring.style.strokeDasharray = `${e * pct / 100 * circ} ${circ}`;
+    if (p < 1) requestAnimationFrame(step);
+  });
+}
+
+const recObs = new IntersectionObserver(
+  es => es.forEach(e => {
+    if (e.isIntersecting) {
+      animateRing('recRing', 82, 88);
+      recObs.unobserve(e.target);
+    }
+  }),
+  { threshold: 0.4 }
+);
+const recEl = document.getElementById('recRing');
+if (recEl) recObs.observe(recEl.closest('.feature'));
+
+// ── EXISTING: Feature visual parallax ──────────────────────────────────────────
+if (!prefersReduced) {
+  const visuals = [...document.querySelectorAll('.feature-visual')];
+  let ticking = false;
+  function parallax() {
+    const vh = innerHeight;
+    visuals.forEach(v => {
+      if (!v.classList.contains('on')) return;
+      const rect = v.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > vh) return;
+      const progress = (rect.top + rect.height / 2 - vh / 2) / (vh / 2);
+      const shift = Math.max(-1, Math.min(1, progress)) * -22;
+      v.style.transform = `translateY(${shift}px)`;
+    });
+    ticking = false;
+  }
+  addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(parallax);
+      ticking = true;
+    }
+  }, { passive: true });
+  parallax();
+}
+
+// ── EXISTING: Pointer tracking glow ────────────────────────────────────────────
+if (!prefersReduced && matchMedia('(pointer:fine)').matches) {
+  document.querySelectorAll('.visual-card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width * 100).toFixed(1);
+      const y = ((e.clientY - r.top) / r.height * 100).toFixed(1);
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    });
+  });
+}
+</script>
+</body>
+</html>
